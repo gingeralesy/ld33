@@ -12,6 +12,13 @@ std::list<Level *> * Leverloda::loadLevels(Game *game)
   return levels;
 }
 
+World * Leverloda::loadWorld(const std::string &dataName)
+{
+
+}
+
+// -- Private --
+
 Level * Leverloda::firstLevel(Game *game)
 {
   Level *level = new Level(game,"level1");
