@@ -3,6 +3,7 @@
 
 #include <list>
 #include <map>
+#include <SFML/Graphics.hpp>
 
 #include "entity.h"
 
@@ -15,6 +16,11 @@ public:
   void addEntity(Entity *entity);
   std::list<Entity *> entities();
   Entity * entity(const int &id);
+
+  // --- Loop functions ---
+  void doEvent(const sf::Event &e);
+  void draw(sf::RenderTarget *rTarget);
+  void update();
 
 private:
   Game *m_game;

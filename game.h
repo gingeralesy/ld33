@@ -20,10 +20,6 @@ public:
   static int newEntityId();
 
 private:
-  void doEvent(const sf::Event &e);
-  void draw();
-  void update();
-
   sf::RenderWindow *m_window;
   std::vector<Level *> m_levels;
   int m_currentLevel;
