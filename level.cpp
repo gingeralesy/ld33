@@ -19,8 +19,8 @@ Level::Level(Game *game, const std::string &dataName)
       mmVpWidth = m_minimap.getSize().x / windowSize.x,
       mmVpHeight = m_minimap.getSize().y / windowSize.y;
 
-  m_minimap.setViewport(sf::FloatRect(1.f - mmVpWidth - 0.02f,
-                                      0.03f, mmVpWidth, mmVpHeight));
+  m_minimap.setViewport(sf::FloatRect(1.f - mmVpWidth - 0.02f, 0.03f,
+                                      mmVpWidth, mmVpHeight));
   m_minimap.zoom(4.f);
 
   sf::FloatRect mmVp = m_minimap.getViewport();

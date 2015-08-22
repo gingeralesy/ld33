@@ -54,13 +54,13 @@ sf::Uint32 * Leverloda::loadWorld(const std::string &dataName,
         {
           points[i] = 1;
           if (leftTile == i)
-            points[i] += 1;
+            points[i] += 2;
           if (upperLeftTile == i)
-            points[i] += 1;
+            points[i] += 2;
           if (upperTile == i)
-            points[i] += 1;
+            points[i] += 2;
           if (upperRightTile == i)
-            points[i] += 1;
+            points[i] += 2;
 
           totalPoints += points[i];
         }
