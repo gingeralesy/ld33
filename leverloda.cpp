@@ -18,7 +18,7 @@ Level * Leverloda::firstLevel(Game *game)
 
   Player *player = new Player(game);
   player->setCenter(400.f,300.f);
-  level->addEntity(player);
+  level->addEntity(player,Level::Player);
 
   return level;
 }

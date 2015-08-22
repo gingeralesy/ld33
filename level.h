@@ -10,11 +10,21 @@
 class Level
 {
 public:
+  enum Layer
+  {
+    All,
+    WorldTiles,
+    WorldContent,
+    WorldCreatures,
+    Player,
+    Interface
+  };
+
   explicit Level(Game *game, std::string dataName);
   ~Level();
 
-  void addEntity(Entity *entity);
-  std::list<Entity *> entities();
+  void addEntity(Entity *entity, const Layer &layer);
+  std::list<Entity *> * entities(const Layer &layer = All);
   Entity * entity(const int &id);
 
   // --- Loop functions ---
@@ -25,8 +35,8 @@ public:
 private:
   Game *m_game;
   sf::Texture m_tileset;
-  std::list<Entity *> m_entityList;
-  std::map<const int, Entity *> m_entityMap;
+  std::multimap<const Layer, Entity *> m_entityLayers;
+  std::map<const Entity::ID, Entity *> m_entityMap;
 };
 
 #endif // LEVEL_H

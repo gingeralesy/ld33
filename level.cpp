@@ -15,23 +15,44 @@ Level::Level(Game *game, std::string dataName)
 Level::~Level()
 {
   m_entityMap.clear();
-  while (!m_entityList.empty())
+
+  std::list<Entity *> *entityList = entities();
+  m_entityLayers.clear();
+
+  while (!entityList->empty())
   {
-    Entity *e = m_entityList.front();
-    m_entityList.pop_front();
+    Entity *e = entityList->front();
+    entityList->pop_front();
     delete e;
   }
+  delete entityList;
 }
 
-void Level::addEntity(Entity *entity)
+void Level::addEntity(Entity *entity, const Layer &layer)
 {
-  m_entityList.push_back(entity);
+  m_entityLayers.insert(std::make_pair(layer,entity));
   m_entityMap[entity->id()] = entity;
 }
 
-std::list<Entity *> Level::entities()
+std::list<Entity *> * Level::entities(const Layer &layer)
 {
-  return m_entityList;
+  std::list<Entity *> *entities = new std::list<Entity *>();
+  if (!m_entityLayers.empty())
+  {
+    std::multimap<Layer, Entity *>::iterator it;
+    if (layer == All)
+    {
+      for (it = m_entityLayers.begin(); it != m_entityLayers.end(); it++)
+        entities->push_back((*it).second);
+    }
+    else
+    {
+      for (it = m_entityLayers.lower_bound(layer);
+           it != m_entityLayers.upper_bound(layer); it++)
+        entities->push_back((*it).second);
+    }
+  }
+  return entities;
 }
 
 Entity * Level::entity(const int &id)
@@ -42,12 +63,12 @@ Entity * Level::entity(const int &id)
 // --- Loop functions ---
 void Level::doEvent(const sf::Event &e)
 {
-  if (!m_entityList.empty())
+  if (!m_entityLayers.empty())
   {
-    for (std::list<Entity*>::iterator it = m_entityList.begin();
-         it != m_entityList.end(); it++)
+    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
+         it != m_entityLayers.end(); it++)
     {
-      Entity *entity = *it;
+      Entity *entity = (*it).second;
       entity->doEvent(e);
     }
   }
@@ -57,23 +78,26 @@ void Level::draw(sf::RenderTarget *rTarget)
 {
   // Draw objects here
   rTarget->clear(sf::Color::Black);
-  if (!m_entityList.empty())
+  if (!m_entityLayers.empty())
   {
-    for (std::list<Entity*>::iterator it = m_entityList.begin();
-         it != m_entityList.end(); it++)
-      rTarget->draw(**it);
+    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
+         it != m_entityLayers.end(); it++)
+    {
+      Entity *e = (*it).second;
+      rTarget->draw(*e);
+    }
   }
 }
 
 void Level::update(const float &delta)
 {
   // Update objects here
-  if (!m_entityList.empty())
+  if (!m_entityLayers.empty())
   {
-    for (std::list<Entity*>::iterator it = m_entityList.begin();
-         it != m_entityList.end(); it++)
+    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
+         it != m_entityLayers.end(); it++)
     {
-      Entity *e = *it;
+      Entity *e = (*it).second;
       e->update(delta);
     }
   }

@@ -22,7 +22,7 @@ Entity::~Entity()
 
 // --- Public ---
 
-const int Entity::id()
+const Entity::ID Entity::id()
 {
   return m_id;
 }
