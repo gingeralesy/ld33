@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <list>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "entity.h"
+#include "level.h"
 
 class Game
 {
@@ -12,9 +12,8 @@ public:
   explicit Game(const std::string &title);
   ~Game();
 
-  void addEntity(Entity *entity);
+  Level * level(int levelNum = -1);
   float delta();
-  Entity * entity(const int &id);
   int exec();
   bool init();
 
@@ -26,10 +25,11 @@ private:
   void update();
 
   sf::RenderWindow *m_window;
+  std::vector<Level *> m_levels;
+  int m_currentLevel;
+  bool m_started;
   bool m_paused;
   float m_delta;
-  std::list<Entity *> m_entityList;
-  std::map<const int, Entity *> m_entityMap;
 };
 
 #endif // GAME_H

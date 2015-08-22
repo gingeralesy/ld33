@@ -3,7 +3,8 @@
 // --- Constructor ---
 
 Game::Game(const std::string &title)
-  : m_window(new sf::RenderWindow()), m_paused(false), m_delta(0)
+  : m_window(new sf::RenderWindow()), m_currentLevel(0),
+    m_started(false), m_paused(false), m_delta(0)
 {
   m_window->create(sf::VideoMode(800, 600, 32), title,
                    sf::Style::Titlebar | sf::Style::Close);
@@ -16,24 +17,21 @@ Game::Game(const std::string &title)
 
 Game::~Game()
 {
-  while (!m_entityList.empty())
+  if (m_window)
   {
-    Entity *e = m_entityList.front();
-    m_entityList.pop_front();
-    delete e;
+    sf::RenderWindow *tmpWin = m_window;
+    m_window = 0;
+    delete tmpWin;
   }
-  m_entityMap.clear();
-
-  sf::RenderWindow *tmpWin = m_window;
-  m_window = 0;
-  delete tmpWin;
 }
 
 // --- Public ---
 
-void Game::addEntity(Entity *entity)
+Level * Game::level(int levelNum)
 {
-  m_entityList.push_back(entity);
+  if (levelNum == -1 || levelNum )
+    return m_levels.at(m_currentLevel);
+  return m_levels.at(levelNum);
 }
 
 float Game::delta()
@@ -41,13 +39,12 @@ float Game::delta()
   return m_delta;
 }
 
-Entity * Game::entity(const int &id)
-{
-  m_entityMap.at(id);
-}
-
 int Game::exec()
 {
+  if (m_started)
+    return EXIT_SUCCESS;
+  m_started = true;
+
   sf::Clock clock;
   while (m_window->isOpen())
   {
@@ -72,6 +69,9 @@ int Game::exec()
 
 bool Game::init()
 {
+  if (m_started)
+    return false;
+
   return true;
 }
 
@@ -101,8 +101,8 @@ void Game::doEvent(const sf::Event &e)
     m_paused = false;
     break;
   default:
-    for (std::list<Entity*>::iterator it = m_entityList.begin();
-         it != m_entityList.end(); it++)
+    for (std::list<Entity*>::iterator it = level()->entities().begin();
+         it != level()->entities().end(); it++)
     {
       Entity *entity = *it;
       entity->doEvent(e);
@@ -116,8 +116,8 @@ void Game::draw()
   m_window->clear(sf::Color::Black);
 
   // Draw objects here
-  for (std::list<Entity*>::iterator it = m_entityList.begin();
-       it != m_entityList.end(); it++)
+  for (std::list<Entity*>::iterator it = level()->entities().begin();
+       it != level()->entities().end(); it++)
     m_window->draw(**it);
 
   m_window->display();
@@ -126,8 +126,8 @@ void Game::draw()
 void Game::update()
 {
   // Update objects here
-  for (std::list<Entity*>::iterator it = m_entityList.begin();
-       it != m_entityList.end(); it++)
+  for (std::list<Entity*>::iterator it = level()->entities().begin();
+       it != level()->entities().end(); it++)
   {
     Entity *e = *it;
     e->update(m_delta);
