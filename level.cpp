@@ -18,7 +18,6 @@ Level::~Level()
 
   std::list<Entity *> *entityList = entities();
   m_entityLayers.clear();
-
   while (!entityList->empty())
   {
     Entity *e = entityList->front();
@@ -65,8 +64,8 @@ void Level::doEvent(const sf::Event &e)
 {
   if (!m_entityLayers.empty())
   {
-    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
-         it != m_entityLayers.end(); it++)
+    std::multimap<Layer, Entity *>::iterator it;
+    for (it = m_entityLayers.begin(); it != m_entityLayers.end(); it++)
     {
       Entity *entity = (*it).second;
       entity->doEvent(e);
@@ -80,8 +79,8 @@ void Level::draw(sf::RenderTarget *rTarget)
   rTarget->clear(sf::Color::Black);
   if (!m_entityLayers.empty())
   {
-    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
-         it != m_entityLayers.end(); it++)
+    std::multimap<Layer, Entity *>::iterator it;
+    for (it = m_entityLayers.begin(); it != m_entityLayers.end(); it++)
     {
       Entity *e = (*it).second;
       rTarget->draw(*e);
@@ -94,8 +93,8 @@ void Level::update(const float &delta)
   // Update objects here
   if (!m_entityLayers.empty())
   {
-    for (std::multimap<Layer, Entity *>::iterator it = m_entityLayers.begin();
-         it != m_entityLayers.end(); it++)
+    std::multimap<Layer, Entity *>::iterator it;
+    for (it = m_entityLayers.begin(); it != m_entityLayers.end(); it++)
     {
       Entity *e = (*it).second;
       e->update(delta);

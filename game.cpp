@@ -22,6 +22,13 @@ Game::Game(const std::string &title)
 
 Game::~Game()
 {
+  while (!m_levels.empty())
+  {
+    Level *level = m_levels.back();
+    m_levels.pop_back();
+    delete level;
+  }
+
   if (m_window)
   {
     sf::RenderWindow *tmpWin = m_window;
