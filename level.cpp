@@ -32,4 +32,3 @@ Entity * Level::entity(const int &id)
 {
   m_entityMap.at(id);
 }
-
