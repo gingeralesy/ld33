@@ -20,7 +20,7 @@ public:
   // --- Loop functions ---
   void doEvent(const sf::Event &e);
   void draw(sf::RenderTarget *rTarget);
-  void update();
+  void update(const float &delta);
 
 private:
   Game *m_game;

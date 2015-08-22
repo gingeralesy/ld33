@@ -65,7 +65,7 @@ void Level::draw(sf::RenderTarget *rTarget)
   }
 }
 
-void Level::update()
+void Level::update(const float &delta)
 {
   // Update objects here
   if (!m_entityList.empty())
@@ -74,7 +74,7 @@ void Level::update()
          it != m_entityList.end(); it++)
     {
       Entity *e = *it;
-      e->update(m_game->delta());
+      e->update(delta);
     }
   }
 }

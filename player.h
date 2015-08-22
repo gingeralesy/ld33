@@ -11,6 +11,11 @@ public:
 
   void doEvent(const sf::Event &event);
   void update(const float &delta);
+
+private:
+  void keyPressed(const sf::Keyboard::Key &key);
+  void keyReleased(const sf::Keyboard::Key &key);
+
 };
 
 #endif // PLAYER_H

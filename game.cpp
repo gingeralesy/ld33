@@ -1,6 +1,9 @@
 #include "game.h"
 
+#include <SFML/Graphics.hpp>
+
 #include "leverloda.h"
+#include "resources.h"
 
 // --- Constructor ---
 
@@ -47,6 +50,25 @@ int Game::exec()
     return EXIT_SUCCESS;
   m_started = true;
 
+  sf::RectangleShape pauseOverlay;
+  pauseOverlay.setPosition(0,0);
+  pauseOverlay.setSize(sf::Vector2f(m_window->getSize().x,
+                                    m_window->getSize().y));
+  pauseOverlay.setFillColor(sf::Color(0,0,0,128));
+
+  sf::Font font;
+  font.loadFromFile(Resources::ttfDataPath("blamdude"));
+  sf::Text pauseText;
+  pauseText.setFont(font);
+  pauseText.setString("Paused");
+  pauseText.setColor(sf::Color::White);
+
+  sf::FloatRect rect = pauseText.getGlobalBounds();
+  pauseText.setPosition(sf::Vector2f(m_window->getSize().x / 2.f -
+                                       rect.width / 2.f,
+                                     m_window->getSize().y / 2.f -
+                                       rect.height / 2.f));
+
   Level *cLevel = level();
   sf::Clock clock;
   while (m_window->isOpen())
@@ -78,10 +100,17 @@ int Game::exec()
     else
     {
       m_delta = clock.restart().asSeconds();
-      cLevel->update();
+      cLevel->update(m_delta);
     }
 
     cLevel->draw(m_window);
+
+    if (m_paused)
+    {
+      m_window->draw(pauseOverlay);
+      m_window->draw(pauseText);
+    }
+
     m_window->display();
   }
 

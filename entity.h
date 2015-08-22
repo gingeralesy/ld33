@@ -15,11 +15,16 @@ public:
   virtual void update(const float &delta) = 0;
 
   const int id();
+  const sf::Vector2f center();
+  const void setCenter(sf::Vector2f pos);
+  const void setCenter(float x, float y);
 
-private:
+protected:
   const int m_id;
   Game *m_game;
   sf::Texture m_texture;
+  sf::Vector2f m_vector;
+  float m_speed;
 };
 
 #endif // ENTITY_H

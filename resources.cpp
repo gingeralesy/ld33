@@ -11,3 +11,9 @@ const std::string Resources::pngDataPath(const std::string &dataName)
   const std::string path = dataPath() + dataName + ".png";
   return path;
 }
+
+const std::string Resources::ttfDataPath(const std::string &dataName)
+{
+  const std::string path = dataPath() + dataName + ".ttf";
+  return path;
+}

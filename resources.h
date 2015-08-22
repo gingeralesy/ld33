@@ -8,6 +8,7 @@ class Resources
 public:
   static const std::string dataPath();
   static const std::string pngDataPath(const std::string &dataName);
+  static const std::string ttfDataPath(const std::string &dataName);
 };
 
 #endif // RESOURCES_H
