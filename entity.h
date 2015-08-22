@@ -19,7 +19,7 @@ public:
 private:
   const int m_id;
   Game *m_game;
-  sf::Texture *m_texture;
+  sf::Texture m_texture;
 };
 
 #endif // ENTITY_H
