@@ -1,7 +1,5 @@
 #include "level.h"
 
-#include "SFML/Config.hpp"
-
 Level::Level(Game *game, std::string dataName)
   : m_game(game)
 {
