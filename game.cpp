@@ -87,9 +87,6 @@ void Game::doEvent(const sf::Event &e)
   case sf::Event::Closed:
     m_window->close();
     break;
-  case sf::Event::KeyPressed:
-    // Call an input handler
-    break;
   case sf::Event::LostFocus:
     m_paused = true;
     break;
@@ -97,6 +94,12 @@ void Game::doEvent(const sf::Event &e)
     m_paused = false;
     break;
   default:
+    for (std::list<Entity*>::iterator it = m_entityList.begin();
+         it != m_entityList.end(); it++)
+    {
+      Entity *entity = *it;
+      entity->doEvent(e);
+    }
     break;
   }
 }

@@ -9,6 +9,7 @@ public:
   explicit Entity(const sf::Image &image);
   virtual ~Entity() {}
 
+  virtual void doEvent(const sf::Event &e) const = 0;
   virtual void update(const float &delta) const = 0;
 
   const int id();
