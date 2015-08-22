@@ -1,5 +1,7 @@
 #include "level.h"
 
+#include <math.h>
+
 #include "resources.h"
 #include "game.h"
 
@@ -8,20 +10,30 @@ Level::Level(Game *game, const std::string &dataName)
 {
   sf::View fixed = m_game->fixedView();
   m_standard = fixed;
+
+  m_worldSize.x =
+    static_cast<float>(m_world->mapWidth() * m_world->tileSize().x);
+  m_worldSize.y =
+    static_cast<float>(m_world->mapHeight() * m_world->tileSize().y);
+
+  float zoom = m_worldSize.x / 200.f;
   m_minimap =
-    sf::View(sf::FloatRect(fixed.getCenter().x,
-                           fixed.getCenter().y,
-                           200.f, 150.f));
+    sf::View(sf::FloatRect(m_worldSize.x / 2.f,
+                           m_worldSize.y / 2.f,
+                           m_worldSize.x / zoom,
+                           m_worldSize.y / zoom));
 
   sf::Vector2f windowSize(static_cast<float>(m_game->window()->getSize().x),
                           static_cast<float>(m_game->window()->getSize().y));
+
   float
       mmVpWidth = m_minimap.getSize().x / windowSize.x,
       mmVpHeight = m_minimap.getSize().y / windowSize.y;
 
   m_minimap.setViewport(sf::FloatRect(1.f - mmVpWidth - 0.02f, 0.03f,
                                       mmVpWidth, mmVpHeight));
-  m_minimap.zoom(4.f);
+  m_minimap.zoom(zoom);
+  m_minimap.setCenter(m_worldSize.x / 2.f, m_worldSize.y / 2.f);
 
   sf::FloatRect mmVp = m_minimap.getViewport();
   m_minimapBG.setPosition(mmVp.left * windowSize.x - 5.f,
@@ -120,13 +132,34 @@ void Level::draw(sf::RenderTarget *rTarget)
   {
     std::multimap<Layer, Entity *>::iterator it;
 
+    sf::Vector2f camCenter(m_standard.getSize().x / 2.f,
+                           m_standard.getSize().y / 2.f);
+    if (m_entityLayers.count(PlayerLayer) > 0)
+    {
+      Entity *player = (*m_entityLayers.find(PlayerLayer)).second;
+      sf::Vector2f playerCenter = player->center();
+      if (playerCenter.x > camCenter.x)
+        camCenter.x = playerCenter.x;
+      if (playerCenter.y > camCenter.y)
+        camCenter.y = playerCenter.y;
+
+      float maxX = m_worldSize.x - m_standard.getSize().x / 2.f;
+      float maxY = m_worldSize.y - m_standard.getSize().y / 2.f;
+      if (camCenter.x > maxX)
+        camCenter.x = maxX;
+      if (camCenter.y > maxY)
+        camCenter.y = maxY;
+    }
+
     // Draw the world background tiles
     rTarget->setView(m_standard);
+    m_standard.setCenter(camCenter);
+
     rTarget->draw(*m_world);
 
     // Draw world contents
     for (it = m_entityLayers.lower_bound(WorldContent);
-         it != m_entityLayers.upper_bound(Player); it++)
+         it != m_entityLayers.upper_bound(PlayerLayer); it++)
     {
       Entity *e = (*it).second;
       rTarget->draw(*e);
@@ -150,11 +183,11 @@ void Level::draw(sf::RenderTarget *rTarget)
 
     rTarget->setView(m_minimap);
     for (it = m_entityLayers.lower_bound(WorldContent);
-         it != m_entityLayers.upper_bound(Player); it++)
+         it != m_entityLayers.upper_bound(PlayerLayer); it++)
     {
       Entity *e = (*it).second;
-      sf::RectangleShape blip(sf::Vector2f(e->getTextureRect().width,
-                                           e->getTextureRect().height));
+      sf::RectangleShape blip(sf::Vector2f(m_world->tileSize().x * 4.f,
+                                           m_world->tileSize().y * 4.f));
       blip.setPosition(e->getPosition());
       blip.setFillColor(sf::Color(221, 42, 42, 221));
       rTarget->draw(blip);
@@ -175,4 +208,9 @@ void Level::update(const float &delta)
       e->update(delta);
     }
   }
+}
+
+const World * Level::world() const
+{
+  return m_world;
 }

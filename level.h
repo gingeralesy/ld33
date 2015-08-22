@@ -16,7 +16,7 @@ public:
     All = 0,
     WorldContent,
     WorldCreatures,
-    Player,
+    PlayerLayer,
     Overlay
   };
 
@@ -32,9 +32,12 @@ public:
   void draw(sf::RenderTarget *rTarget);
   void update(const float &delta);
 
+  const World * world() const;
+
 private:
   Game *m_game;
   World *m_world;
+  sf::Vector2f m_worldSize;
   sf::View m_standard;
   sf::View m_minimap;
   sf::RectangleShape m_minimapBG;

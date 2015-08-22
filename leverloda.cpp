@@ -90,9 +90,11 @@ Level * Leverloda::firstLevel(Game *game)
 {
   Level *level = new Level(game,"level1");
 
+  sf::Vector2f center(level->world()->mapWidth() * level->world()->tileSize().x / 2.f,
+                      level->world()->mapHeight() * level->world()->tileSize().y / 2.f);
   Player *player = new Player(game);
-  player->setCenter(400.f,300.f);
-  level->addEntity(player,Level::Player);
+  player->setCenter(center);
+  level->addEntity(player,Level::PlayerLayer);
 
   return level;
 }

@@ -8,7 +8,7 @@ Player::Player(Game *game, const std::string dataName)
   rect.height = 32;
   setTextureRect(rect);
 
-  m_speed = 32.f * 3.f;
+  m_speed = 32.f * 4.5f;
 }
 
 Player::~Player()

@@ -13,10 +13,17 @@ public:
                  sf::Vector2u tileSize = sf::Vector2u(32,32));
   ~World();
 
+  const sf::Uint32 mapWidth() const;
+  const sf::Uint32 mapHeight() const;
+  const sf::Vector2u tileSize() const;
+
 private:
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   unsigned int *m_map;
+  const sf::Uint32 m_mapWidth;
+  const sf::Uint32 m_mapHeight;
+  const sf::Vector2u m_tileSize;
   sf::VertexArray m_vertices;
   sf::Texture m_tileset;
 };

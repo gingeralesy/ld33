@@ -7,7 +7,8 @@ World::World(const std::string &dataName,
              sf::Uint32 mapWidth,
              sf::Uint32 mapHeight,
              sf::Vector2u tileSize)
-  : m_map(Leverloda::loadWorld(dataName, mapWidth, mapHeight))
+  : m_map(Leverloda::loadWorld(dataName, mapWidth, mapHeight)),
+    m_mapWidth(mapWidth), m_mapHeight(mapHeight), m_tileSize(tileSize)
 {
   if (m_tileset.loadFromFile(Resources::pngDataPath(dataName)))
   {
@@ -58,3 +59,19 @@ void World::draw(sf::RenderTarget &target, sf::RenderStates states) const
   states.texture = &m_tileset;
   target.draw(m_vertices, states);
 }
+
+const sf::Vector2u World::tileSize() const
+{
+  return m_tileSize;
+}
+
+const sf::Uint32 World::mapHeight() const
+{
+  return m_mapHeight;
+}
+
+const sf::Uint32 World::mapWidth() const
+{
+  return m_mapWidth;
+}
+
