@@ -1,6 +1,7 @@
 #include "leverloda.h"
 
 #include "game.h"
+#include "player.h"
 
 std::list<Level *> * Leverloda::loadLevels(Game *game)
 {
@@ -15,6 +16,7 @@ Level * Leverloda::firstLevel(Game *game)
 {
   Level *level = new Level(game);
 
+  level->addEntity(new Player(game));
 
   return level;
 }

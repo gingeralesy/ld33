@@ -6,7 +6,9 @@ Level::Level(Game *game, std::string dataName)
   : m_game(game)
 {
   if (m_tileset.loadFromFile(Resources::pngDataPath(dataName)))
+  {
     m_tileset.setSmooth(false);
+  }
 }
 
 Level::~Level()
