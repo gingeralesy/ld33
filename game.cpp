@@ -8,6 +8,8 @@ Game::Game(const std::string &title)
   m_window->create(sf::VideoMode(800, 600, 32), title,
                    sf::Style::Titlebar | sf::Style::Close);
   m_window->setVerticalSyncEnabled(true);
+  m_window->setFramerateLimit(60);
+  m_window->setMouseCursorVisible(false);
 }
 
 // --- Deconstructor ---

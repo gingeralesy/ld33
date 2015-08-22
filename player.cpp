@@ -1,7 +1,7 @@
 #include "player.h"
 
-Player::Player(const sf::Image &image)
-  : Entity(image)
+Player::Player(const std::string dataName)
+  : Entity(dataName)
 {
 
 }

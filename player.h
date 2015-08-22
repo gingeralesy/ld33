@@ -6,7 +6,7 @@
 class Player : public Entity
 {
 public:
-  explicit Player(const sf::Image &image);
+  explicit Player(const std::string dataName = "player");
   ~Player();
 
   void doEvent(const sf::Event &event);

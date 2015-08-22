@@ -6,7 +6,7 @@
 class Entity : public sf::Sprite
 {
 public:
-  explicit Entity(const sf::Image &image);
+  explicit Entity(const std::string &dataName);
   virtual ~Entity() {}
 
   virtual void doEvent(const sf::Event &event) = 0;

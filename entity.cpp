@@ -1,14 +1,15 @@
 #include "entity.h"
 
 #include "game.h"
+#include "resources.h"
 
 // --- Constructor ---
 
-Entity::Entity(const sf::Image &image)
+Entity::Entity(const std::string &dataName)
   : sf::Sprite(), m_id(Game::newEntityId())
 {
   sf::Texture texture;
-  texture.loadFromImage(image);
+  texture.loadFromFile(Resources::pngDataPath(dataName));
   setTexture(texture);
 }
 
