@@ -70,6 +70,11 @@ int Game::exec()
   return EXIT_SUCCESS;
 }
 
+bool Game::init()
+{
+  return true;
+}
+
 // -- Static --
 
 int Game::newEntityId()

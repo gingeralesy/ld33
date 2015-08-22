@@ -16,6 +16,7 @@ public:
   float delta();
   Entity * entity(const int &id);
   int exec();
+  bool init();
 
   static int newEntityId();
 

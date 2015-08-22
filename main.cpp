@@ -2,6 +2,8 @@
 
 int main()
 {
-  Game g("SFML Experiment");
-  return g.exec();
+  Game g("LD33");
+  if (g.init())
+    return g.exec();
+  return EXIT_FAILURE;
 }
