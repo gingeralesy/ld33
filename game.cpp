@@ -74,10 +74,13 @@ bool Game::init()
   if (m_started)
     return false;
 
-  std::list<Level *> levels = Leverloda::loadLevels();
-  for (std::list<Level *>::iterator it = levels.begin();
-       it != levels.end(); it++)
+  std::list<Level *> * levels = Leverloda::loadLevels();
+  for (std::list<Level *>::iterator it = levels->begin();
+       it != levels->end(); it++)
     m_levels.push_back((Level *)(*it));
+
+  levels->clear();
+  delete levels;
 
   return true;
 }

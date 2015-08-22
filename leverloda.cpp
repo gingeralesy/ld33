@@ -1,8 +1,8 @@
 #include "leverloda.h"
 
-static std::list<Level *> Leverloda::loadLevels()
+std::list<Level *> * Leverloda::loadLevels()
 {
-  static std::list levels;
+  std::list<Level *> *levels = new std::list<Level *>();
 
 
 

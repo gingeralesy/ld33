@@ -8,7 +8,7 @@
 class Leverloda
 {
 public:
-  static std::list<Level *> loadLevels();
+  static std::list<Level *> * loadLevels();
 
 private:
 };
