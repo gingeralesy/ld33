@@ -1,6 +1,10 @@
-#include "leverlåda.h"
+#include "leverloda.h"
 
-Leverloda::Leverloda()
+static std::list<Level *> Leverloda::loadLevels()
 {
+  static std::list levels;
 
+
+
+  return levels;
 }

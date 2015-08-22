@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "leverloda.h"
+
 // --- Constructor ---
 
 Game::Game(const std::string &title)
@@ -71,6 +73,11 @@ bool Game::init()
 {
   if (m_started)
     return false;
+
+  std::list<Level *> levels = Leverloda::loadLevels();
+  for (std::list<Level *>::iterator it = levels.begin();
+       it != levels.end(); it++)
+    m_levels.push_back((Level *)(*it));
 
   return true;
 }
