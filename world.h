@@ -10,7 +10,7 @@ public:
   explicit World(const std::string &dataName,
                  unsigned int mapWidth = 128,
                  unsigned int mapHeight = 64,
-                 sf::Vector2u tileSize = sf::Vector2u(32,32));
+                 sf::Vector2u tileSize = sf::Vector2u(16,16));
   ~World();
 
   const sf::Uint32 mapWidth() const;
@@ -25,6 +25,8 @@ private:
   const sf::Uint32 m_mapHeight;
   const sf::Vector2u m_tileSize;
   sf::VertexArray m_vertices;
+  sf::VertexArray m_verticesSandEdges;
+  sf::VertexArray m_verticesGrassEdges;
   sf::Texture m_tileset;
 };
 
