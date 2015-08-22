@@ -6,13 +6,23 @@
 // --- Constructor ---
 
 Entity::Entity(Game *game, const std::string &dataName)
-  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game)
+  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
+    m_texture(new sf::Texture)
 {
-  sf::Texture texture;
-  if (texture.loadFromFile(Resources::pngDataPath(dataName)))
+  if (m_texture->loadFromFile(Resources::pngDataPath(dataName)))
   {
-    texture.setSmooth(false);
-    setTexture(texture);
+    m_texture->setSmooth(false);
+    setTexture(*m_texture);
+  }
+}
+
+Entity::~Entity()
+{
+  if (m_texture)
+  {
+    sf::Texture *tmpText = m_texture;
+    m_texture = 0;
+    tmpText = 0;
   }
 }
 
