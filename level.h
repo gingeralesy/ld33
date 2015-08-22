@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "entity.h"
+#include "world.h"
 
 class Level
 {
@@ -13,14 +14,13 @@ public:
   enum Layer
   {
     All = 0,
-    WorldTiles,
     WorldContent,
     WorldCreatures,
     Player,
     Overlay
   };
 
-  explicit Level(Game *game, std::string dataName);
+  explicit Level(Game *game, const std::string &dataName);
   ~Level();
 
   void addEntity(Entity *entity, const Layer &layer);
@@ -34,7 +34,7 @@ public:
 
 private:
   Game *m_game;
-  sf::Texture m_tileset;
+  World *m_world;
   sf::View m_standard;
   sf::View m_minimap;
   sf::RectangleShape m_minimapBG;

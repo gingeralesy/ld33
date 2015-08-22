@@ -3,14 +3,9 @@
 #include "resources.h"
 #include "game.h"
 
-Level::Level(Game *game, std::string dataName)
-  : m_game(game)
+Level::Level(Game *game, const std::string &dataName)
+  : m_game(game), m_world(new World(dataName))
 {
-  if (m_tileset.loadFromFile(Resources::pngDataPath(dataName)))
-  {
-    m_tileset.setSmooth(false);
-  }
-
   sf::View fixed = m_game->fixedView();
   m_standard = fixed;
   m_minimap =
@@ -49,6 +44,13 @@ Level::~Level()
     delete e;
   }
   delete entityList;
+
+  if (m_world)
+  {
+    World *tmpWorld = m_world;
+    m_world = 0;
+    delete tmpWorld;
+  }
 }
 
 void Level::addEntity(Entity *entity, const Layer &layer)
@@ -118,14 +120,19 @@ void Level::draw(sf::RenderTarget *rTarget)
   {
     std::multimap<Layer, Entity *>::iterator it;
 
+    // Draw the world background tiles
     rTarget->setView(m_standard);
-    for (it = m_entityLayers.lower_bound(WorldTiles);
+    rTarget->draw(*m_world);
+
+    // Draw world contents
+    for (it = m_entityLayers.lower_bound(WorldContent);
          it != m_entityLayers.upper_bound(Player); it++)
     {
       Entity *e = (*it).second;
       rTarget->draw(*e);
     }
 
+    // Draw the overlay
     if (m_entityLayers.count(Overlay) > 0)
     {
       rTarget->setView(m_game->fixedView());
@@ -137,25 +144,23 @@ void Level::draw(sf::RenderTarget *rTarget)
       }
     }
 
-    if (m_entityLayers.count(Player) > 0)
-    {
-      rTarget->setView(m_game->fixedView());
-      rTarget->draw(m_minimapBG);
-
-      rTarget->setView(m_minimap);
-      for (it = m_entityLayers.lower_bound(WorldTiles);
-           it != m_entityLayers.upper_bound(Player); it++)
-      {
-        Entity *e = (*it).second;
-        sf::RectangleShape blip(sf::Vector2f(e->getTextureRect().width,
-                                             e->getTextureRect().height));
-        blip.setPosition(e->getPosition());
-        blip.setFillColor(sf::Color(221, 42, 42, 221));
-        rTarget->draw(blip);
-      }
-    }
+    // Draw minimap
     rTarget->setView(m_game->fixedView());
+    rTarget->draw(m_minimapBG);
+
+    rTarget->setView(m_minimap);
+    for (it = m_entityLayers.lower_bound(WorldContent);
+         it != m_entityLayers.upper_bound(Player); it++)
+    {
+      Entity *e = (*it).second;
+      sf::RectangleShape blip(sf::Vector2f(e->getTextureRect().width,
+                                           e->getTextureRect().height));
+      blip.setPosition(e->getPosition());
+      blip.setFillColor(sf::Color(221, 42, 42, 221));
+      rTarget->draw(blip);
+    }
   }
+  rTarget->setView(m_game->fixedView());
 }
 
 void Level::update(const float &delta)

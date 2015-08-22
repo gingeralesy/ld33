@@ -12,9 +12,24 @@ std::list<Level *> * Leverloda::loadLevels(Game *game)
   return levels;
 }
 
-World * Leverloda::loadWorld(const std::string &dataName)
+int * Leverloda::loadWorld(const std::string &dataName,
+                           unsigned int mapWidth,
+                           unsigned int mapHeight)
 {
-
+  int *map = new int[mapWidth * mapHeight];
+  if (dataName == "level1")
+  {
+    srand((unsigned)time(0));
+    for (unsigned int x = 0; x < mapWidth; x++)
+    {
+      for (unsigned int y = 0; y < mapHeight; y++)
+      {
+        unsigned int tileInMap = x + (y * mapWidth);
+        map[tileInMap] = rand() % 3;
+      }
+    }
+  }
+  return map;
 }
 
 // -- Private --
