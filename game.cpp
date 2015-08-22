@@ -87,6 +87,12 @@ int Game::exec()
     {
       switch (e.type)
       {
+      case sf::Event::KeyPressed:
+        if (e.key.code != sf::Keyboard::Escape)
+        {
+          cLevel->doEvent(e);
+          break;
+        }
       case sf::Event::Closed:
         m_window->close();
         break;

@@ -137,17 +137,21 @@ void Level::draw(sf::RenderTarget *rTarget)
       }
     }
 
-    if (m_entityLayers.count(WorldTiles) > 0)
+    if (m_entityLayers.count(Player) > 0)
     {
       rTarget->setView(m_game->fixedView());
       rTarget->draw(m_minimapBG);
 
       rTarget->setView(m_minimap);
       for (it = m_entityLayers.lower_bound(WorldTiles);
-           it != m_entityLayers.upper_bound(WorldTiles); it++)
+           it != m_entityLayers.upper_bound(Player); it++)
       {
         Entity *e = (*it).second;
-        rTarget->draw(*e);
+        sf::RectangleShape blip(sf::Vector2f(e->getTextureRect().width,
+                                             e->getTextureRect().height));
+        blip.setPosition(e->getPosition());
+        blip.setFillColor(sf::Color(221, 42, 42, 221));
+        rTarget->draw(blip);
       }
     }
     rTarget->setView(m_game->fixedView());

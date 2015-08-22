@@ -6,8 +6,7 @@
 // --- Constructor ---
 
 Entity::Entity(Game *game, const std::string &dataName)
-  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
-    m_speed(64.0)
+  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game)
 {
   if (m_texture.loadFromFile(Resources::pngDataPath(dataName)))
   {
