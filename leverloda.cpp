@@ -14,7 +14,7 @@ std::list<Level *> * Leverloda::loadLevels(Game *game)
 
 Level * Leverloda::firstLevel(Game *game)
 {
-  Level *level = new Level(game);
+  Level *level = new Level(game,"level1");
 
   level->addEntity(new Player(game));
 

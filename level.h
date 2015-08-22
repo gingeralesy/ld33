@@ -9,7 +9,7 @@
 class Level
 {
 public:
-  explicit Level(Game *game, std::string dataName = "level");
+  explicit Level(Game *game, std::string dataName);
   ~Level();
 
   void addEntity(Entity *entity);
