@@ -1,7 +1,7 @@
 #include "player.h"
 
-Player::Player(const std::string dataName)
-  : Entity(dataName)
+Player::Player(Game *game, const std::string dataName)
+  : Entity(game, dataName)
 {
 
 }

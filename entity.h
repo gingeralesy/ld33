@@ -3,10 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
+class Game;
+
 class Entity : public sf::Sprite
 {
 public:
-  explicit Entity(const std::string &dataName);
+  explicit Entity(Game *game, const std::string &dataName);
   virtual ~Entity() {}
 
   virtual void doEvent(const sf::Event &event) = 0;
@@ -16,6 +18,7 @@ public:
 
 private:
   const int m_id;
+  Game *m_game;
 };
 
 #endif // ENTITY_H

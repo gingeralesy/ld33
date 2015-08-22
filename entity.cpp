@@ -5,8 +5,8 @@
 
 // --- Constructor ---
 
-Entity::Entity(const std::string &dataName)
-  : sf::Sprite(), m_id(Game::newEntityId())
+Entity::Entity(Game *game, const std::string &dataName)
+  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game)
 {
   sf::Texture texture;
   texture.loadFromFile(Resources::pngDataPath(dataName));

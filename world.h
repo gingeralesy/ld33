@@ -6,7 +6,7 @@
 class World : public Entity
 {
 public:
-  explicit World(const std::string &dataName = "world");
+  explicit World(Game *game, const std::string &dataName = "world");
 };
 
 #endif // WORLD_H

@@ -1,6 +1,7 @@
 #include "world.h"
 
-World::World(const std::string &dataName) : Entity(dataName)
+World::World(Game *game, const std::string &dataName)
+  : Entity(game, dataName)
 {
 
 }
