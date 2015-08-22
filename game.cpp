@@ -5,7 +5,7 @@
 // --- Constructor ---
 
 Game::Game(const std::string &title)
-  : m_window(new sf::RenderWindow()), m_currentLevel(0),
+  : m_window(new sf::RenderWindow()), m_currentLevel(-1),
     m_started(false), m_paused(false), m_delta(0)
 {
   m_window->create(sf::VideoMode(800, 600, 32), title,
@@ -78,9 +78,10 @@ bool Game::init()
   for (std::list<Level *>::iterator it = levels->begin();
        it != levels->end(); it++)
     m_levels.push_back((Level *)(*it));
-
   levels->clear();
   delete levels;
+
+  m_currentLevel = 0;
 
   return true;
 }
@@ -99,6 +100,8 @@ int Game::newEntityId()
 
 void Game::doEvent(const sf::Event &e)
 {
+  std::list<Entity*> entities = level()->entities();
+
   switch (e.type)
   {
   case sf::Event::Closed:
@@ -111,11 +114,14 @@ void Game::doEvent(const sf::Event &e)
     m_paused = false;
     break;
   default:
-    for (std::list<Entity*>::iterator it = level()->entities().begin();
-         it != level()->entities().end(); it++)
+    if (!entities.empty())
     {
-      Entity *entity = *it;
-      entity->doEvent(e);
+      for (std::list<Entity*>::iterator it = entities.begin();
+           it != entities.end(); it++)
+      {
+        Entity *entity = *it;
+        entity->doEvent(e);
+      }
     }
     break;
   }
@@ -126,9 +132,13 @@ void Game::draw()
   m_window->clear(sf::Color::Black);
 
   // Draw objects here
-  for (std::list<Entity*>::iterator it = level()->entities().begin();
-       it != level()->entities().end(); it++)
-    m_window->draw(**it);
+  std::list<Entity*> entities = level()->entities();
+  if (!entities.empty())
+  {
+    for (std::list<Entity*>::iterator it = entities.begin();
+         it != entities.end(); it++)
+      m_window->draw(**it);
+  }
 
   m_window->display();
 }
@@ -136,10 +146,14 @@ void Game::draw()
 void Game::update()
 {
   // Update objects here
-  for (std::list<Entity*>::iterator it = level()->entities().begin();
-       it != level()->entities().end(); it++)
+  std::list<Entity*> entities = level()->entities();
+  if (!entities.empty())
   {
-    Entity *e = *it;
-    e->update(m_delta);
+    for (std::list<Entity*>::iterator it = entities.begin();
+         it != entities.end(); it++)
+    {
+      Entity *e = *it;
+      e->update(m_delta);
+    }
   }
 }
