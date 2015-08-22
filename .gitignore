@@ -28,5 +28,5 @@
 *.app
 
 # qtcreator files
-CMakeLists.txt.user
-
+*.user
+*.user.*
