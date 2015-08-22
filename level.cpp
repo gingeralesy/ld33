@@ -1,9 +1,12 @@
 #include "level.h"
 
+#include "resources.h"
+
 Level::Level(Game *game, std::string dataName)
   : m_game(game)
 {
-
+  m_tileset.loadFromFile(Resources::pngDataPath(dataName));
+  m_tileset.setSmooth(false);
 }
 
 Level::~Level()

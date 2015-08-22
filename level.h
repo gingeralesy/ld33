@@ -18,6 +18,7 @@ public:
 
 private:
   Game *m_game;
+  sf::Texture m_tileset;
   std::list<Entity *> m_entityList;
   std::map<const int, Entity *> m_entityMap;
 };

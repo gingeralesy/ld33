@@ -10,6 +10,7 @@ Entity::Entity(Game *game, const std::string &dataName)
 {
   sf::Texture texture;
   texture.loadFromFile(Resources::pngDataPath(dataName));
+  texture.setSmooth(false);
   setTexture(texture);
 }
 
