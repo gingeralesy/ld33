@@ -10,6 +10,30 @@ Level::Level(Game *game, std::string dataName)
   {
     m_tileset.setSmooth(false);
   }
+
+  sf::View fixed = m_game->fixedView();
+  m_standard = fixed;
+  m_minimap =
+    sf::View(sf::FloatRect(fixed.getCenter().x,
+                           fixed.getCenter().y,
+                           200.f, 150.f));
+
+  sf::Vector2f windowSize(static_cast<float>(m_game->window()->getSize().x),
+                          static_cast<float>(m_game->window()->getSize().y));
+  float
+      mmVpWidth = m_minimap.getSize().x / windowSize.x,
+      mmVpHeight = m_minimap.getSize().y / windowSize.y;
+
+  m_minimap.setViewport(sf::FloatRect(1.f - mmVpWidth - 0.02f,
+                                      0.03f, mmVpWidth, mmVpHeight));
+  m_minimap.zoom(4.f);
+
+  sf::FloatRect mmVp = m_minimap.getViewport();
+  m_minimapBG.setPosition(mmVp.left * windowSize.x - 5.f,
+                          mmVp.top * windowSize.y - 5.f);
+  m_minimapBG.setSize(sf::Vector2f(mmVp.width * windowSize.x + 10.f,
+                                   mmVp.height * windowSize.y + 10.f));
+  m_minimapBG.setFillColor(sf::Color(8, 8, 160, 128));
 }
 
 Level::~Level()
@@ -62,6 +86,19 @@ Entity * Level::entity(const int &id)
 // --- Loop functions ---
 void Level::doEvent(const sf::Event &e)
 {
+  if (e.type == sf::Event::KeyPressed)
+  {
+    switch (e.key.code)
+    {
+    case sf::Keyboard::PageUp:
+      m_standard.zoom(-1.5f);
+      break;
+    case sf::Keyboard::PageDown:
+      m_standard.zoom(1.5f);
+      break;
+    }
+  }
+
   if (!m_entityLayers.empty())
   {
     std::multimap<Layer, Entity *>::iterator it;
@@ -80,11 +117,40 @@ void Level::draw(sf::RenderTarget *rTarget)
   if (!m_entityLayers.empty())
   {
     std::multimap<Layer, Entity *>::iterator it;
-    for (it = m_entityLayers.begin(); it != m_entityLayers.end(); it++)
+
+    rTarget->setView(m_standard);
+    for (it = m_entityLayers.lower_bound(WorldTiles);
+         it != m_entityLayers.upper_bound(Player); it++)
     {
       Entity *e = (*it).second;
       rTarget->draw(*e);
     }
+
+    if (m_entityLayers.count(Overlay) > 0)
+    {
+      rTarget->setView(m_game->fixedView());
+      for (it = m_entityLayers.lower_bound(Overlay);
+           it != m_entityLayers.upper_bound(Overlay); it++)
+      {
+        Entity *e = (*it).second;
+        rTarget->draw(*e);
+      }
+    }
+
+    if (m_entityLayers.count(WorldTiles) > 0)
+    {
+      rTarget->setView(m_game->fixedView());
+      rTarget->draw(m_minimapBG);
+
+      rTarget->setView(m_minimap);
+      for (it = m_entityLayers.lower_bound(WorldTiles);
+           it != m_entityLayers.upper_bound(WorldTiles); it++)
+      {
+        Entity *e = (*it).second;
+        rTarget->draw(*e);
+      }
+    }
+    rTarget->setView(m_game->fixedView());
   }
 }
 

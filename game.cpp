@@ -9,13 +9,15 @@
 
 Game::Game(const std::string &title)
   : m_window(new sf::RenderWindow()), m_currentLevel(-1),
-    m_started(false), m_paused(false), m_delta(0)
+    m_started(false), m_paused(false), m_delta(0.f)
 {
   m_window->create(sf::VideoMode(800, 600, 32), title,
                    sf::Style::Titlebar | sf::Style::Close);
   m_window->setVerticalSyncEnabled(true);
   m_window->setFramerateLimit(60);
   m_window->setMouseCursorVisible(false);
+
+  m_fixed = m_window->getView();
 }
 
 // --- Deconstructor ---
@@ -124,6 +126,11 @@ int Game::exec()
   return EXIT_SUCCESS;
 }
 
+const sf::View Game::fixedView()
+{
+  return m_fixed;
+}
+
 bool Game::init()
 {
   if (m_started)
@@ -139,6 +146,11 @@ bool Game::init()
   m_currentLevel = 0;
 
   return true;
+}
+
+const sf::RenderWindow * Game::window()
+{
+  return m_window;
 }
 
 // -- Static --

@@ -12,12 +12,12 @@ class Level
 public:
   enum Layer
   {
-    All,
+    All = 0,
     WorldTiles,
     WorldContent,
     WorldCreatures,
     Player,
-    Interface
+    Overlay
   };
 
   explicit Level(Game *game, std::string dataName);
@@ -35,6 +35,10 @@ public:
 private:
   Game *m_game;
   sf::Texture m_tileset;
+  sf::View m_standard;
+  sf::View m_minimap;
+  sf::RectangleShape m_minimapBG;
+
   std::multimap<const Layer, Entity *> m_entityLayers;
   std::map<const Entity::ID, Entity *> m_entityMap;
 };
