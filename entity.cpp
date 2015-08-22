@@ -5,7 +5,7 @@
 // --- Constructor ---
 
 Entity::Entity(const sf::Image &image)
-  : m_id(Game::newEntityId())
+  : sf::Sprite(), m_id(Game::newEntityId())
 {
   sf::Texture texture;
   texture.loadFromImage(image);

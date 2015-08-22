@@ -6,6 +6,11 @@ Player::Player(const sf::Image &image)
 
 }
 
+Player::~Player()
+{
+
+}
+
 void Player::doEvent(const sf::Event &event)
 {
 

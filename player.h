@@ -6,7 +6,8 @@
 class Player : public Entity
 {
 public:
-  Player(const sf::Image &image);
+  explicit Player(const sf::Image &image);
+  ~Player();
 
   void doEvent(const sf::Event &event);
   void update(const float &delta);
