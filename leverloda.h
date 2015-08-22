@@ -13,9 +13,9 @@ class Leverloda
 {
 public:
   static std::list<Level *> * loadLevels(Game *game);
-  static int * loadWorld(const std::string &dataName,
-                         unsigned int mapWidth,
-                         unsigned int mapHeight);
+  static sf::Uint32 *loadWorld(const std::string &dataName,
+                               sf::Uint32 mapWidth,
+                               sf::Uint32 mapHeight);
 
 private:
   static Level * firstLevel(Game *game);

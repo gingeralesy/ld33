@@ -16,7 +16,7 @@ public:
 private:
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-  int *m_map;
+  unsigned int *m_map;
   sf::VertexArray m_vertices;
   sf::Texture m_tileset;
 };

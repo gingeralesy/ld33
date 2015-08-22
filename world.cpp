@@ -4,8 +4,8 @@
 #include "resources.h"
 
 World::World(const std::string &dataName,
-             unsigned int mapWidth,
-             unsigned int mapHeight,
+             sf::Uint32 mapWidth,
+             sf::Uint32 mapHeight,
              sf::Vector2u tileSize)
   : m_map(Leverloda::loadWorld(dataName, mapWidth, mapHeight))
 {
@@ -16,15 +16,15 @@ World::World(const std::string &dataName,
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(128 * 64 * 4);
 
-    int tilesPerX = m_tileset.getSize().x / tileSize.x;
-    for (unsigned int x = 0; x < mapWidth; x++)
+    sf::Uint32 tilesPerX = m_tileset.getSize().x / tileSize.x;
+    for (sf::Uint32 x = 0; x < mapWidth; x++)
     {
-      for (unsigned int y = 0; y < mapHeight; y++)
+      for (sf::Uint32 y = 0; y < mapHeight; y++)
       {
-        int tileInMap = x + y * mapWidth;
-        int tileValue = m_map[tileInMap];
-        int tu = tileValue % tilesPerX;
-        int tv = tileValue / tilesPerX;
+        sf::Uint32 tileInMap = x + y * mapWidth;
+        sf::Uint32 tileValue = m_map[tileInMap];
+        sf::Uint32 tu = tileValue % tilesPerX;
+        sf::Uint32 tv = tileValue / tilesPerX;
 
         sf::Vertex *quad = &m_vertices[tileInMap * 4];
 
@@ -46,7 +46,7 @@ World::~World()
 {
   if (m_map)
   {
-    int *tmpMap = m_map;
+    sf::Uint32 *tmpMap = m_map;
     m_map = 0;
     delete tmpMap;
   }
