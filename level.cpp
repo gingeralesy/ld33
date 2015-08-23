@@ -8,6 +8,8 @@
 Level::Level(Game *game, const std::string &dataName)
   : m_game(game), m_world(new World(dataName))
 {
+  m_buildingsTexture.loadFromFile(Resources::pngDataPath("buildings"));
+
   sf::View fixed = m_game->fixedView();
   m_standard = fixed;
   m_standard.zoom(0.5f);
@@ -46,9 +48,16 @@ Level::Level(Game *game, const std::string &dataName)
 
 Level::~Level()
 {
-  m_entityMap.clear();
+  if (!m_buildings.empty())
+  {
+    std::map<const BuildingType, Building *>::iterator it;
+    for (it = m_buildings.begin(); it != m_buildings.end(); it++)
+      delete (*it).second;
+    m_buildings.clear();
+  }
 
   std::list<Entity *> *entityList = entities();
+  m_entityMap.clear();
   m_entityLayers.clear();
   while (!entityList->empty())
   {
@@ -64,6 +73,12 @@ Level::~Level()
     m_world = 0;
     delete tmpWorld;
   }
+}
+
+void Level::addBuilding(const BuildingType &type,
+                        const sf::Vector2f &location)
+{
+
 }
 
 void Level::addEntity(Entity *entity, const Layer &layer)

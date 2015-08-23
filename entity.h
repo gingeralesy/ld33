@@ -21,8 +21,10 @@ public:
     West = 3
   };
 
-  explicit Entity(Game *game, const std::string &dataName);
-  explicit Entity(Game *game, const sf::Texture &texture);
+  explicit Entity(Game *game, const std::string &dataName,
+                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32));
+  explicit Entity(Game *game, const sf::Texture &texture,
+                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32));
   ~Entity();
 
   virtual void doEvent(const sf::Event &event) = 0;
@@ -37,6 +39,7 @@ protected:
   const ID m_id;
   Game *m_game;
   sf::Texture m_texture;
+  sf::IntRect m_tileSize;
   sf::Vector2f m_vector;
   float m_speed;
   Facing m_facing;
