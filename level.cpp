@@ -8,7 +8,7 @@
 #include "towerbuilding.h"
 
 Level::Level(Game *game, const std::string &dataName)
-  : m_game(game), m_world(new World(dataName))
+  : m_game(game), m_world(new World(game, dataName))
 {
   m_buildingsTexture.loadFromFile(Resources::pngDataPath("buildings"));
 
@@ -179,13 +179,14 @@ void Level::draw(sf::RenderTarget *rTarget)
         camCenter.y = maxY;
     }
 
-    // Draw the world background tiles
+    // Set the view proper
     rTarget->setView(m_standard);
     m_standard.setCenter(camCenter);
 
+    // Draw the world background tiles
     rTarget->draw(*m_world);
 
-    // Draw world contents
+    // Draw entities
     for (it = m_entityLayers.lower_bound(WorldContent);
          it != m_entityLayers.upper_bound(PlayerLayer); it++)
     {

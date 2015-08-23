@@ -52,7 +52,7 @@ float Game::delta()
 {
   return m_delta;
 }
-
+#include <iostream>
 int Game::exec()
 {
   if (m_started)

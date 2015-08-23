@@ -1,13 +1,17 @@
 #include "world.h"
+
+#include <math.h>
+
 #include "leverloda.h"
-
 #include "resources.h"
+#include "game.h"
 
-World::World(const std::string &dataName,
+World::World(Game *game,
+             const std::string &dataName,
              sf::Uint32 mapWidth,
              sf::Uint32 mapHeight,
              sf::Vector2u tileSize)
-  : m_map(Leverloda::loadWorld(dataName, mapWidth, mapHeight)),
+  : m_game(game), m_map(Leverloda::loadWorld(dataName, mapWidth, mapHeight)),
     m_mapWidth(mapWidth), m_mapHeight(mapHeight), m_tileSize(tileSize)
 {
   if (m_tileset.loadFromFile(Resources::pngDataPath(dataName)))
@@ -22,6 +26,8 @@ World::World(const std::string &dataName,
 
     m_verticesGrassEdges.setPrimitiveType(sf::Quads);
     m_verticesGrassEdges.resize(128 * 64 * 4);
+
+    m_toDraw = new sf::Vertex[128 * 64 * 4 * 3];
 
     sf::Uint32 tilesPerX = m_tileset.getSize().x / tileSize.x;
     for (sf::Uint32 x = 0; x < mapWidth; x++)
@@ -277,15 +283,68 @@ World::~World()
     m_map = 0;
     delete tmpMap;
   }
+
+  if (m_toDraw)
+    delete m_toDraw;
 }
 
 void World::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
+  sf::View view = m_game->window()->getView();
+
+  float
+    firstXf = (view.getCenter().x - view.getSize().x / 2.f) / m_tileSize.x,
+    firstYf = (view.getCenter().y  - view.getSize().y / 2.f) / m_tileSize.y;
+  if (firstXf < 0.f)
+    firstXf = 0.f;
+  if (firstYf < 0.f)
+    firstYf = 0.f;
+
+  sf::Uint32
+      firstX = static_cast<sf::Uint32>(firstXf),
+      firstY = static_cast<sf::Uint32>(firstYf),
+      width = static_cast<sf::Uint32>(floorf((view.getSize().x / m_tileSize.x) + 1.5f)),
+      height = static_cast<sf::Uint32>(floorf((view.getSize().y / m_tileSize.y) + 1.5f));
+
+  if (firstX + width > m_mapWidth)
+    width = m_mapWidth - firstX;
+  if (firstY + height > m_mapHeight)
+    height = m_mapHeight - firstY;
+
+  sf::Uint32
+      vertexCount = width * height * 4;
+
+  for (sf::Uint32 x = 0; x < width; x++)
+  {
+    for (sf::Uint32 y = 0; y < height; y++)
+    {
+      sf::Uint32 tileNum = ((firstX + x) + (firstY + y) * m_mapWidth) * 4;
+      sf::Uint32 visTileNum = (x + y * width) * 4;
+
+      const sf::Vertex *mainQuad = &m_vertices[tileNum];
+      const sf::Vertex *sandQuad = &m_verticesSandEdges[tileNum];
+      const sf::Vertex *grassQuad = &m_verticesGrassEdges[tileNum];
+
+      for (sf::Uint32 i = 0; i < 4; i++)
+      {
+        sf::Vertex *visMainQuad =
+          new sf::Vertex(mainQuad[i].position, mainQuad[i].texCoords);
+        sf::Vertex *visSandQuad =
+          new sf::Vertex(sandQuad[i].position, sandQuad[i].texCoords);
+        sf::Vertex *visGrassQuad =
+          new sf::Vertex(grassQuad[i].position, grassQuad[i].texCoords);
+
+        m_toDraw[visTileNum + i] = *visMainQuad;
+        m_toDraw[visTileNum + i + vertexCount] = *visSandQuad;
+        m_toDraw[visTileNum + i + vertexCount + vertexCount] = *visGrassQuad;
+      }
+    }
+  }
+
   states.transform *= getTransform();
   states.texture = &m_tileset;
-  target.draw(m_vertices, states);
-  target.draw(m_verticesSandEdges, states);
-  target.draw(m_verticesGrassEdges, states);
+
+  target.draw(m_toDraw, vertexCount * 3, sf::Quads, states);
 }
 
 const sf::Vector2u World::tileSize() const
