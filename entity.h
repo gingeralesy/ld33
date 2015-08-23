@@ -22,16 +22,19 @@ public:
   };
 
   explicit Entity(Game *game, const std::string &dataName,
-                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32));
+                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32),
+                  const sf::IntRect &hitBox = sf::IntRect(0,0,32,32));
   explicit Entity(Game *game, const sf::Texture &texture,
-                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32));
+                  const sf::IntRect &tileSize = sf::IntRect(0,0,32,32),
+                  const sf::IntRect &hitBox = sf::IntRect(0,0,32,32));
   ~Entity();
 
   virtual void doEvent(const sf::Event &event) = 0;
   virtual void update(const float &delta) = 0;
 
-  const ID id();
-  const sf::Vector2f center();
+  const sf::IntRect hitbox() const;
+  const ID id() const;
+  const sf::Vector2f center() const;
   const void setCenter(sf::Vector2f pos);
   const void setCenter(float x, float y);
 
@@ -40,6 +43,7 @@ protected:
   Game *m_game;
   sf::Texture m_texture;
   sf::IntRect m_tile;
+  sf::IntRect m_hitbox;
   sf::Vector2f m_vector;
   float m_speed;
   Facing m_facing;

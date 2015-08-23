@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player(Game *game, const std::string dataName)
-  : Entity(game, dataName, sf::IntRect(0,0,16,32))
+  : Entity(game, dataName, sf::IntRect(0,0,16,32), sf::IntRect(0,16,16,16))
 {
   setTextureRect(m_tile);
 

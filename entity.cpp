@@ -6,9 +6,10 @@
 // --- Constructor ---
 
 Entity::Entity(Game *game, const std::string &dataName,
-               const sf::IntRect &tileSize)
+               const sf::IntRect &tileSize,
+               const sf::IntRect &hitBox)
   : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
-    m_tile(tileSize), m_facing(South)
+    m_tile(tileSize), m_hitbox(hitBox), m_facing(South)
 {
   if (m_texture.loadFromFile(Resources::pngDataPath(dataName)))
   {
@@ -19,9 +20,11 @@ Entity::Entity(Game *game, const std::string &dataName,
 }
 
 Entity::Entity(Game *game, const sf::Texture &texture,
-               const sf::IntRect &tileSize)
+               const sf::IntRect &tileSize,
+               const sf::IntRect &hitBox)
   : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
-    m_texture(texture), m_tile(tileSize), m_facing(South)
+    m_texture(texture), m_tile(tileSize), m_hitbox(hitBox),
+    m_facing(South)
 {
   m_texture.setSmooth(false);
   setTexture(m_texture);
@@ -34,12 +37,17 @@ Entity::~Entity()
 
 // --- Public ---
 
-const Entity::ID Entity::id()
+const sf::IntRect Entity::hitbox() const
+{
+  return m_hitbox;
+}
+
+const Entity::ID Entity::id() const
 {
   return m_id;
 }
 
-const sf::Vector2f Entity::center()
+const sf::Vector2f Entity::center() const
 {
   sf::Vector2f pos = getPosition();
   sf::FloatRect rect = getGlobalBounds();
