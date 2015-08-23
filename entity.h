@@ -39,7 +39,7 @@ protected:
   const ID m_id;
   Game *m_game;
   sf::Texture m_texture;
-  sf::IntRect m_tileSize;
+  sf::IntRect m_tile;
   sf::Vector2f m_vector;
   float m_speed;
   Facing m_facing;

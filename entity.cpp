@@ -8,7 +8,7 @@
 Entity::Entity(Game *game, const std::string &dataName,
                const sf::IntRect &tileSize)
   : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
-    m_tileSize(tileSize), m_facing(South)
+    m_tile(tileSize), m_facing(South)
 {
   if (m_texture.loadFromFile(Resources::pngDataPath(dataName)))
   {
@@ -20,7 +20,7 @@ Entity::Entity(Game *game, const std::string &dataName,
 Entity::Entity(Game *game, const sf::Texture &texture,
                const sf::IntRect &tileSize)
   : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
-    m_texture(texture), m_tileSize(tileSize), m_facing(South)
+    m_texture(texture), m_tile(tileSize), m_facing(South)
 {
   m_texture.setSmooth(false);
   setTexture(m_texture);

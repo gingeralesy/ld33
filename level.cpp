@@ -4,6 +4,8 @@
 
 #include "resources.h"
 #include "game.h"
+#include "basebuilding.h"
+#include "towerbuilding.h"
 
 Level::Level(Game *game, const std::string &dataName)
   : m_game(game), m_world(new World(dataName))
@@ -48,12 +50,11 @@ Level::Level(Game *game, const std::string &dataName)
 
 Level::~Level()
 {
-  if (!m_buildings.empty())
+  while (!m_buildings.empty())
   {
-    std::map<const BuildingType, Building *>::iterator it;
-    for (it = m_buildings.begin(); it != m_buildings.end(); it++)
-      delete (*it).second;
-    m_buildings.clear();
+    Building *building = m_buildings.front();
+    m_buildings.pop_front();
+    delete building;
   }
 
   std::list<Entity *> *entityList = entities();
@@ -76,9 +77,19 @@ Level::~Level()
 }
 
 void Level::addBuilding(const BuildingType &type,
-                        const sf::Vector2f &location)
+                        const sf::Vector2f &position)
 {
-
+  switch (type)
+  {
+  case Base:
+    m_buildings.push_back(new BaseBuilding(m_game,m_buildingsTexture,
+                                           position));
+    break;
+  case Tower:
+    m_buildings.push_back(new TowerBuilding(m_game,m_buildingsTexture,
+                                            position));
+    break;
+  }
 }
 
 void Level::addEntity(Entity *entity, const Layer &layer)

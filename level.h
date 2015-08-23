@@ -30,7 +30,7 @@ public:
   explicit Level(Game *game, const std::string &dataName);
   ~Level();
 
-  void addBuilding(const BuildingType &type, const sf::Vector2f &location);
+  void addBuilding(const BuildingType &type, const sf::Vector2f &position);
   void addEntity(Entity *entity, const Layer &layer);
   std::list<Entity *> * entities(const Layer &layer = All);
   Entity * entity(const int &id);
@@ -53,7 +53,7 @@ private:
 
   std::multimap<const Layer, Entity *> m_entityLayers;
   std::map<const Entity::ID, Entity *> m_entityMap;
-  std::map<const BuildingType, Building *> m_buildings;
+  std::list<Building *> m_buildings;
 };
 
 #endif // LEVEL_H

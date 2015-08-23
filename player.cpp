@@ -3,7 +3,7 @@
 Player::Player(Game *game, const std::string dataName)
   : Entity(game, dataName, sf::IntRect(0,0,16,32))
 {
-  setTextureRect(m_tileSize);
+  setTextureRect(m_tile);
 
   m_speed = 32.f * 4.5f;
 
@@ -11,7 +11,7 @@ Player::Player(Game *game, const std::string dataName)
   Facing dir = South;
   frameTimes.push_back(1.f);
   frameTimes.push_back(1.f);
-  Animation *idleSouth = new Animation(m_tileSize,dir,0,frameTimes);
+  Animation *idleSouth = new Animation(m_tile,dir,0,frameTimes);
   m_animations[dir * 10 + 0] = idleSouth;
 
   frameTimes.clear();
@@ -19,14 +19,14 @@ Player::Player(Game *game, const std::string dataName)
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
-  Animation *walkSouth = new Animation(m_tileSize,dir,2,frameTimes);
+  Animation *walkSouth = new Animation(m_tile,dir,2,frameTimes);
   m_animations[dir * 10 + 1] = walkSouth;
 
   frameTimes.clear();
   dir = East;
   frameTimes.push_back(1.f);
   frameTimes.push_back(1.f);
-  Animation *idleEast = new Animation(m_tileSize,dir,0,frameTimes);
+  Animation *idleEast = new Animation(m_tile,dir,0,frameTimes);
   m_animations[dir * 10 + 0] = idleEast;
 
   frameTimes.clear();
@@ -34,14 +34,14 @@ Player::Player(Game *game, const std::string dataName)
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
-  Animation *walkEast = new Animation(m_tileSize,dir,2,frameTimes);
+  Animation *walkEast = new Animation(m_tile,dir,2,frameTimes);
   m_animations[dir * 10 + 1] = walkEast;
 
   frameTimes.clear();
   dir = North;
   frameTimes.push_back(1.f);
   frameTimes.push_back(1.f);
-  Animation *idleNorth = new Animation(m_tileSize,dir,0,frameTimes);
+  Animation *idleNorth = new Animation(m_tile,dir,0,frameTimes);
   m_animations[dir * 10 + 0] = idleNorth;
 
   frameTimes.clear();
@@ -49,14 +49,14 @@ Player::Player(Game *game, const std::string dataName)
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
-  Animation *walkNorth = new Animation(m_tileSize,dir,2,frameTimes);
+  Animation *walkNorth = new Animation(m_tile,dir,2,frameTimes);
   m_animations[dir * 10 + 1] = walkNorth;
 
   frameTimes.clear();
   dir = West;
   frameTimes.push_back(1.f);
   frameTimes.push_back(1.f);
-  Animation *idleWest = new Animation(m_tileSize,dir,0,frameTimes);
+  Animation *idleWest = new Animation(m_tile,dir,0,frameTimes);
   m_animations[dir * 10 + 0] = idleWest;
 
   frameTimes.clear();
@@ -64,7 +64,7 @@ Player::Player(Game *game, const std::string dataName)
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
-  Animation *walkWest = new Animation(m_tileSize,dir,2,frameTimes);
+  Animation *walkWest = new Animation(m_tile,dir,2,frameTimes);
   m_animations[dir * 10 + 1] = walkWest;
 }
 
