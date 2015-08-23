@@ -50,17 +50,17 @@ Level::Level(Game *game, const std::string &dataName)
 
 Level::~Level()
 {
-  std::list<Entity *> *entityList = entities();
+  std::list<Entity *> entityList;
+  entities(&entityList);
   m_entityMap.clear();
   m_entityLayers.clear();
   m_buildings.clear();
-  while (!entityList->empty())
+  while (!entityList.empty())
   {
-    Entity *e = entityList->front();
-    entityList->pop_front();
+    Entity *e = entityList.front();
+    entityList.pop_front();
     delete e;
   }
-  delete entityList;
 
   if (m_world)
   {
@@ -99,9 +99,9 @@ void Level::addEntity(Entity *entity, const Layer &layer)
   m_entityMap[entity->id()] = entity;
 }
 
-std::list<Entity *> * Level::entities(const Layer &layer)
+void Level::entities(std::list<Entity *> *entities,
+                     const Layer &layer)
 {
-  std::list<Entity *> *entities = new std::list<Entity *>();
   if (!m_entityLayers.empty())
   {
     std::multimap<Layer, Entity *>::iterator it;
@@ -117,7 +117,6 @@ std::list<Entity *> * Level::entities(const Layer &layer)
         entities->push_back((*it).second);
     }
   }
-  return entities;
 }
 
 Entity * Level::entity(const int &id)

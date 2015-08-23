@@ -39,7 +39,11 @@ Entity::~Entity()
 
 const sf::IntRect Entity::hitbox() const
 {
-  return m_hitbox;
+  sf::IntRect hitbox(m_hitbox);
+  const sf::Vector2f pos = getPosition();
+  hitbox.left += pos.x;
+  hitbox.top += pos.y;
+  return hitbox;
 }
 
 const Entity::ID Entity::id() const

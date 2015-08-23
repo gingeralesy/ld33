@@ -32,7 +32,8 @@ public:
 
   void addBuilding(const BuildingType &type, const sf::Vector2f &position);
   void addEntity(Entity *entity, const Layer &layer);
-  std::list<Entity *> * entities(const Layer &layer = All);
+  void entities(std::list<Entity *> *entities,
+                const Layer &layer = All);
   Entity * entity(const int &id);
 
   // --- Loop functions ---

@@ -1,5 +1,9 @@
 #include "player.h"
 
+#include "game.h"
+#include "level.h"
+#include "world.h"
+
 Player::Player(Game *game, const std::string dataName)
   : Entity(game, dataName, sf::IntRect(0,0,16,32), sf::IntRect(0,16,16,16))
 {
@@ -96,9 +100,37 @@ void Player::doEvent(const sf::Event &event)
 void Player::update(const float &delta)
 {
   sf::Vector2f pos = getPosition();
-  float x = pos.x + m_vector.x * m_speed * delta;
-  float y = pos.y + m_vector.y * m_speed * delta;
+
+  float
+      xSpeed = m_vector.x * m_speed * delta,
+      ySpeed = m_vector.y * m_speed * delta;
+
+  if (m_vector.x != 0.f)
+    ySpeed /= 2.f;
+  if (m_vector.y != 0.f)
+    xSpeed /= 2.f;
+
+  float x = pos.x + xSpeed;
+  float y = pos.y + ySpeed;
   setPosition(x,y);
+
+  std::list<Entity *> entities;
+  m_game->level()->entities(&entities);
+  std::list<Entity *>::iterator it;
+  for (it = entities.begin(); it != entities.end(); it++)
+  {
+    Entity *en = (*it);
+    if (en->id() != id())
+    {
+      sf::IntRect mHitbox = hitbox();
+      sf::IntRect eHitbox = en->hitbox();
+      if (mHitbox.intersects(eHitbox))
+      {
+        setPosition(pos.x, pos.y);
+        break;
+      }
+    }
+  }
 
   Animation *animation = m_animations.at(m_facing * 10 + 0);
   if (m_vector.x != 0.f || m_vector.y != 0.f)
