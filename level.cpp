@@ -50,16 +50,10 @@ Level::Level(Game *game, const std::string &dataName)
 
 Level::~Level()
 {
-  while (!m_buildings.empty())
-  {
-    Building *building = m_buildings.front();
-    m_buildings.pop_front();
-    delete building;
-  }
-
   std::list<Entity *> *entityList = entities();
   m_entityMap.clear();
   m_entityLayers.clear();
+  m_buildings.clear();
   while (!entityList->empty())
   {
     Entity *e = entityList->front();
@@ -79,16 +73,23 @@ Level::~Level()
 void Level::addBuilding(const BuildingType &type,
                         const sf::Vector2f &position)
 {
+
+  Building *building = 0;
   switch (type)
   {
   case Base:
-    m_buildings.push_back(new BaseBuilding(m_game,m_buildingsTexture,
-                                           position));
+    building =
+      new BaseBuilding(m_game,m_buildingsTexture,position);
     break;
   case Tower:
-    m_buildings.push_back(new TowerBuilding(m_game,m_buildingsTexture,
-                                            position));
+    building =
+      new TowerBuilding(m_game,m_buildingsTexture,position);
     break;
+  }
+  if (building)
+  {
+    m_buildings.push_back(building);
+    addEntity(building, WorldContent);
   }
 }
 

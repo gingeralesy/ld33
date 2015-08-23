@@ -96,5 +96,9 @@ Level * Leverloda::firstLevel(Game *game)
   player->setCenter(center);
   level->addEntity(player,Level::PlayerLayer);
 
+  sf::Vector2f basePos(player->getPosition());
+  basePos.y -= 64.f;
+  level->addBuilding(Level::Base, basePos);
+
   return level;
 }

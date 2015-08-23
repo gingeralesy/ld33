@@ -1,8 +1,8 @@
-#include "game.h"
+#include "orcvillagegame.h"
 
 int main()
 {
-  Game g("LD33");
+  OrcVillageGame g;
   if (g.init())
     return g.exec();
   return EXIT_FAILURE;
