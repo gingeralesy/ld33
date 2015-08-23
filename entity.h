@@ -13,6 +13,14 @@ class Entity : public sf::Sprite
 public:
   typedef int ID;
 
+  enum Facing
+  {
+    South = 0,
+    East = 1,
+    North = 2,
+    West = 3
+  };
+
   explicit Entity(Game *game, const std::string &dataName);
   ~Entity();
 
@@ -30,6 +38,7 @@ protected:
   sf::Texture m_texture;
   sf::Vector2f m_vector;
   float m_speed;
+  Facing m_facing;
   std::map<sf::Uint32, Animation *> m_animations;
 };
 

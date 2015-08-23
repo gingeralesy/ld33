@@ -11,18 +11,64 @@ Player::Player(Game *game, const std::string dataName)
   m_speed = 32.f * 4.5f;
 
   std::vector<float> frameTimes;
+  Facing dir = South;
   frameTimes.push_back(1.f);
   frameTimes.push_back(1.f);
-  Animation *idle = new Animation(rect,0,0,frameTimes);
-  m_animations[0] = idle;
+  Animation *idleSouth = new Animation(rect,dir,0,frameTimes);
+  m_animations[dir * 10 + 0] = idleSouth;
 
   frameTimes.clear();
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
   frameTimes.push_back(0.15f);
-  Animation *walk = new Animation(rect,0,2,frameTimes);
-  m_animations[1] = walk;
+  Animation *walkSouth = new Animation(rect,dir,2,frameTimes);
+  m_animations[dir * 10 + 1] = walkSouth;
+
+  frameTimes.clear();
+  dir = East;
+  frameTimes.push_back(1.f);
+  frameTimes.push_back(1.f);
+  Animation *idleEast = new Animation(rect,dir,0,frameTimes);
+  m_animations[dir * 10 + 0] = idleEast;
+
+  frameTimes.clear();
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  Animation *walkEast = new Animation(rect,dir,2,frameTimes);
+  m_animations[dir * 10 + 1] = walkEast;
+
+  frameTimes.clear();
+  dir = North;
+  frameTimes.push_back(1.f);
+  frameTimes.push_back(1.f);
+  Animation *idleNorth = new Animation(rect,dir,0,frameTimes);
+  m_animations[dir * 10 + 0] = idleNorth;
+
+  frameTimes.clear();
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  Animation *walkNorth = new Animation(rect,dir,2,frameTimes);
+  m_animations[dir * 10 + 1] = walkNorth;
+
+  frameTimes.clear();
+  dir = West;
+  frameTimes.push_back(1.f);
+  frameTimes.push_back(1.f);
+  Animation *idleWest = new Animation(rect,dir,0,frameTimes);
+  m_animations[dir * 10 + 0] = idleWest;
+
+  frameTimes.clear();
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  frameTimes.push_back(0.15f);
+  Animation *walkWest = new Animation(rect,dir,2,frameTimes);
+  m_animations[dir * 10 + 1] = walkWest;
 }
 
 Player::~Player()
@@ -57,11 +103,9 @@ void Player::update(const float &delta)
   float y = pos.y + m_vector.y * m_speed * delta;
   setPosition(x,y);
 
-  Animation *animation = m_animations.at(0);
-  if (m_vector.y > 0.f)
-  {
-    animation = m_animations.at(1);
-  }
+  Animation *animation = m_animations.at(m_facing * 10 + 0);
+  if (m_vector.x != 0.f || m_vector.y != 0.f)
+    animation = m_animations.at(m_facing * 10 + 1);
 
   setTextureRect(animation->getFrame(delta));
 }
@@ -75,15 +119,19 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
   {
   case sf::Keyboard::Left:
     m_vector.x = -1.f;
+    m_facing = West;
     break;
   case sf::Keyboard::Right:
     m_vector.x = 1.f;
+    m_facing = East;
     break;
   case sf::Keyboard::Up:
     m_vector.y = -1.f;
+    m_facing = North;
     break;
   case sf::Keyboard::Down:
     m_vector.y = 1.f;
+    m_facing = South;
     break;
   }
 }
