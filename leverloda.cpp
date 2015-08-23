@@ -100,5 +100,9 @@ Level * Leverloda::firstLevel(Game *game)
   basePos.y -= 64.f;
   level->addBuilding(Level::Base, basePos);
 
+  sf::Vector2f towerPos(player->getPosition());
+  towerPos.x -= 128.f;
+  level->addBuilding(Level::Tower, towerPos);
+
   return level;
 }

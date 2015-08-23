@@ -2,7 +2,7 @@
 
 TowerBuilding::TowerBuilding(Game *game, const sf::Texture &texture,
                              const sf::Vector2f &position)
-  : Building(game, texture, position, sf::IntRect(0,0,32,32))
+  : Building(game, texture, position, sf::IntRect(32,0,32,32))
 {
 
 }

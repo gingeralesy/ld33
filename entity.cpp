@@ -14,6 +14,7 @@ Entity::Entity(Game *game, const std::string &dataName,
   {
     m_texture.setSmooth(false);
     setTexture(m_texture);
+    setTextureRect(tileSize);
   }
 }
 
@@ -24,6 +25,7 @@ Entity::Entity(Game *game, const sf::Texture &texture,
 {
   m_texture.setSmooth(false);
   setTexture(m_texture);
+  setTextureRect(tileSize);
 }
 
 Entity::~Entity()

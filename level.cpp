@@ -212,6 +212,17 @@ void Level::draw(sf::RenderTarget *rTarget)
 
     rTarget->setView(m_minimap);
     for (it = m_entityLayers.lower_bound(WorldContent);
+         it != m_entityLayers.upper_bound(WorldCreatures); it++)
+    {
+      Entity *e = (*it).second;
+      sf::RectangleShape blip(sf::Vector2f(m_world->tileSize().x * 4.f,
+                                           m_world->tileSize().y * 4.f));
+      blip.setPosition(e->getPosition());
+      blip.setFillColor(sf::Color(142, 142, 221, 221));
+      rTarget->draw(blip);
+    }
+
+    for (it = m_entityLayers.lower_bound(PlayerLayer);
          it != m_entityLayers.upper_bound(PlayerLayer); it++)
     {
       Entity *e = (*it).second;
