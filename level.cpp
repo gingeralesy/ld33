@@ -10,6 +10,7 @@ Level::Level(Game *game, const std::string &dataName)
 {
   sf::View fixed = m_game->fixedView();
   m_standard = fixed;
+  m_standard.zoom(0.5f);
 
   m_worldSize.x =
     static_cast<float>(m_world->mapWidth() * m_world->tileSize().x);
@@ -127,7 +128,7 @@ void Level::doEvent(const sf::Event &e)
 void Level::draw(sf::RenderTarget *rTarget)
 {
   // Draw objects here
-  rTarget->clear(sf::Color::Black);
+  rTarget->clear(sf::Color(98, 146, 29));
   if (!m_entityLayers.empty())
   {
     std::multimap<Layer, Entity *>::iterator it;

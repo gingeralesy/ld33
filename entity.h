@@ -1,7 +1,10 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <map>
 #include <SFML/Graphics.hpp>
+
+#include "animation.h"
 
 class Game;
 
@@ -27,6 +30,7 @@ protected:
   sf::Texture m_texture;
   sf::Vector2f m_vector;
   float m_speed;
+  std::map<sf::Uint32, Animation *> m_animations;
 };
 
 #endif // ENTITY_H
