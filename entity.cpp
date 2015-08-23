@@ -16,6 +16,14 @@ Entity::Entity(Game *game, const std::string &dataName)
   }
 }
 
+Entity::Entity(Game *game, const sf::Texture &texture)
+  : sf::Sprite(), m_id(Game::newEntityId()), m_game(game),
+    m_texture(texture), m_facing(South)
+{
+  m_texture.setSmooth(false);
+  setTexture(m_texture);
+}
+
 Entity::~Entity()
 {
 }

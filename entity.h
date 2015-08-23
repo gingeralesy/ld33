@@ -22,6 +22,7 @@ public:
   };
 
   explicit Entity(Game *game, const std::string &dataName);
+  explicit Entity(Game *game, const sf::Texture &texture);
   ~Entity();
 
   virtual void doEvent(const sf::Event &event) = 0;
