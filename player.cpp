@@ -140,18 +140,46 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
   case sf::Keyboard::Left:
     if (m_vector.x < 0.f)
       m_vector.x = 0.f;
+    if (m_facing == West)
+    {
+      if (m_vector.y > 0.f)
+        m_facing = South;
+      else if (m_vector.y < 0.f)
+        m_facing = North;
+    }
     break;
   case sf::Keyboard::Right:
     if (m_vector.x > 0.f)
       m_vector.x = 0.f;
+    if (m_facing == East)
+    {
+      if (m_vector.y > 0.f)
+        m_facing = South;
+      else if (m_vector.y < 0.f)
+        m_facing = North;
+    }
     break;
   case sf::Keyboard::Up:
     if (m_vector.y < 0.f)
       m_vector.y = 0.f;
+    if (m_facing == North)
+    {
+      if (m_vector.x > 0.f)
+        m_facing = East;
+      else if (m_vector.x < 0.f)
+        m_facing = West;
+    }
     break;
   case sf::Keyboard::Down:
     if (m_vector.y > 0.f)
       m_vector.y = 0.f;
+    if (m_facing == South)
+    {
+      if (m_vector.x > 0.f)
+        m_facing = East;
+      else if (m_vector.x < 0.f)
+        m_facing = West;
+    }
     break;
   }
 }
