@@ -3,6 +3,7 @@
 #include "game.h"
 #include "level.h"
 #include "world.h"
+#include "util.h"
 
 Player::Player(Game *game, const std::string dataName)
   : Entity(game, dataName, sf::IntRect(0,0,16,32), sf::IntRect(0,16,16,16))
@@ -99,7 +100,7 @@ void Player::doEvent(const sf::Event &event)
 
 void Player::update(const float &delta)
 {
-  sf::Vector2f pos = getPosition();
+  const sf::Vector2f pos = getPosition();
 
   float
       xSpeed = m_vector.x * m_speed * delta,
@@ -112,10 +113,12 @@ void Player::update(const float &delta)
 
   float x = pos.x + xSpeed;
   float y = pos.y + ySpeed;
-  setPosition(x,y);
+  const sf::Vector2f stopPoint(x, y);
+  setPosition(stopPoint);
 
   std::list<Entity *> entities;
   m_game->level()->entities(&entities);
+
   std::list<Entity *>::iterator it;
   for (it = entities.begin(); it != entities.end(); it++)
   {
@@ -126,7 +129,34 @@ void Player::update(const float &delta)
       sf::IntRect eHitbox = en->hitbox();
       if (mHitbox.intersects(eHitbox))
       {
-        setPosition(pos.x, pos.y);
+        // TODO: make it "slide"
+        /*
+    Vector normal = objects[i].CheckCollision(newPos.x, newPos.y, newPos.z, direction.x, direction.y, direction.z);
+    if(normal != Vector::NullVector())
+    {
+        Vector invNormal = normal.Negative();
+        invNormal = invNormal * (direction * normal).Length(); // Change normal to direction's length and normal's axis
+        Vector wallDir = direction - invNormal;
+        newPos = oldPos + wallDir;
+        direction = newPos - oldPos;
+    }
+         */
+        sf::Vector2f eTopLeft(eHitbox.left, eHitbox.top);
+        sf::Vector2f eBotRight(eHitbox.left + eHitbox.width,
+                               eHitbox.top + eHitbox.height);
+
+        sf::Vector2f intersection;
+        if (Util::linesCollide(eTopLeft, sf::Vector2f(eTopLeft.x, eBotRight.y),
+                               pos, stopPoint, &intersection))
+        {
+          // From left
+          x = eHitbox.left - mHitbox.width;
+          setPosition(x, y);
+        }
+        else
+        {
+          setPosition(pos.x, pos.y);
+        }
         break;
       }
     }
